@@ -38,7 +38,7 @@ public class HttpRequest {
 		//if argument == GET voer dit uit, splits de link!
 		
 		int port = 80;
-		String address = "example.com";
+		String address = "stackoverflow.com";
 		
 		//verbinding leggen met site.
 		Socket s = new Socket(InetAddress.getByName(address), port);
@@ -57,6 +57,8 @@ public class HttpRequest {
 		while((t = br.readLine()) != null){
 			System.out.println(t);
 			out.println(t);
+			out.println("");
+			out.flush();
 		}
 		//sluiten na uitschrijven
 		br.close();
