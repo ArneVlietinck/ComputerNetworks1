@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.*;
 
+public class GetRequest {
 	public static void get(String address, int port) throws UnknownHostException, IOException {
 
 		//if argument == GET voer dit uit, splits de link naar host en afterslash zonder de https//:!
