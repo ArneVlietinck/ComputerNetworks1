@@ -5,7 +5,7 @@ public class HeadRequest {
 
 	public static void head(String[] address, int port) throws UnknownHostException, IOException {
 
-		String newAddress = "";
+		String newAddress;
 		String hostaddress = address[0];
 		String afterSlash =address[1];
 		

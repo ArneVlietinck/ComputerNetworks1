@@ -12,7 +12,7 @@ public class LaurasPrutswerk {
 		//splitsen: http://stackoverflow.com/questions/8694984/remove-part-of-string
 		//if argument == GET voer dit uit, splits de link naar host en afterslash zonder de https//:!
 		Test test = new Test();
-		test.getHTMLcode("https://www.example.com");
+		test.getHTMLcode("https://www.kittens.com");
 		
 	}
 }

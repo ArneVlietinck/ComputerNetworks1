@@ -4,7 +4,7 @@ import java.net.*;
 public class GetRequest {
 	public static void get(String[] address, int port) throws UnknownHostException, IOException {
 
-		String newAddress = "";
+		String newAddress;
 		String hostaddress = address[0];
 		String afterSlash =address[1];
 		
@@ -19,7 +19,7 @@ public class GetRequest {
 		//respons
 		BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
 		
-		//printwriter to textfile
+		//printwriter to htmlfile
 		PrintWriter out = new PrintWriter("test1.html");
 		String commandLineString;
 		
