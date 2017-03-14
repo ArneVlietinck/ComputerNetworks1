@@ -7,27 +7,37 @@ public class Laurasprutswerkserver {
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 
-		ServerSocket serverSocket = new ServerSocket(5482);
+		ServerSocket serverSocket = new ServerSocket(5474);
 		while(true)
 		{
 			Socket clientSocket = serverSocket.accept();
 			BufferedReader inFromClient = new BufferedReader(new InputStreamReader (clientSocket.getInputStream()));
-			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));			
 			String clientSentence = inFromClient.readLine();
 			System.out.println("Received: " + clientSentence);
 
 
 			String s;
 			while ((s = inFromClient.readLine()) != null) {
-				System.out.println(s);
+				//System.out.println(s);
 				if (s.isEmpty()) {
 					break;
 				}
 			}
 
-			Date today = new Date(); 
-			String httpResponse = "HTTP/1.1 200 OK\r\n\r\n" + today; 
-			clientSocket.getOutputStream().write(httpResponse.getBytes("UTF-8"));
+			PrintWriter out = new PrintWriter(clientSocket.getOutputStream());
+			
+			
+			TestServer TestServer = new TestServer();
+			
+			Date today = new Date(); 	
+			out.println("Date: "+today);
+			out.println("HTTP/1.1 200 OK");
+			out.println("Content-Type: text/html");
+			//contentLength headers
+			out.println("\r\n");
+			//		    out.println("<title>LOL</title>");
+			//		    out.println("<p> Hello world </p>");
+			out.flush();		
 
 
 			// on ferme les flux.
@@ -35,7 +45,13 @@ public class Laurasprutswerkserver {
 			out.close();
 			inFromClient.close();
 			clientSocket.close();
+			serverSocket.close();
 		}
 	}
+}
+
+class TestServer{
+
+	
 }
 
