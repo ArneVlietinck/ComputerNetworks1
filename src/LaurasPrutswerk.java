@@ -12,7 +12,7 @@ public class LaurasPrutswerk {
 		//splitsen: http://stackoverflow.com/questions/8694984/remove-part-of-string
 		//if argument == GET voer dit uit, splits de link naar host en afterslash zonder de https//:!
 		Test test = new Test();
-		test.getHTMLcode("https://www.kittens.com");
+		test.getHTMLcode("https://www.stackoverflow.com");
 		
 	}
 }
@@ -21,7 +21,7 @@ class Test{
 	public void getHTMLcode(String address) throws UnknownHostException, IOException{
 		//string splitsen
 		String newAddress = address;
-		newAddress = newAddress.replace("https://","");
+		newAddress = newAddress.replace("https://www.","");
 		int startIndex = newAddress.indexOf("/");
 		String afterSlash;
 		if(startIndex == -1){
@@ -34,17 +34,17 @@ class Test{
 
 		//verbinding leggen met site.
 		int port = 80;
-		Socket s = new Socket(InetAddress.getByName(hostAddress), port);
+		Socket socket = new Socket(InetAddress.getByName(hostAddress), port);
 		//request
-		PrintWriter pw = new PrintWriter(s.getOutputStream());
+		PrintWriter pw = new PrintWriter(socket.getOutputStream());
 		pw.println("GET "+afterSlash+" HTTP/1.1");
 		pw.println("Host: "+hostAddress);
 		pw.println("");
 		pw.flush();
 		//respons
-		BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
+		BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		//printwriter to textfile
-		PrintWriter out = new PrintWriter("test.html");
+		PrintWriter out = new PrintWriter("test.txt");
 		String t;
 		//printen respons
 		while((t = br.readLine()) != null){
@@ -66,7 +66,7 @@ class Test{
 
 		//later sluiten
 		pw.close();
-		s.close();
+		socket.close();
 	}
 
 }
