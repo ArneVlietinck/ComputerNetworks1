@@ -21,19 +21,19 @@ public class Laurasprutswerkserver {
 			System.out.println(command);
 			
 			
-			switch(command){
-			case "HEAD": HeadServer;
-			break;
-			
-			case "GET": GetServer;
-			break;
-				
-			case "PUT": PutServer;
-			break;
-			
-			case "POST": PostServer;
-			break;
-			}	
+//			switch(command){
+//			case "HEAD": HeadServer;
+//			break;
+//			
+//			case "GET": GetServer;
+//			break;
+//				
+//			case "PUT": PutServer;
+//			break;
+//			
+//			case "POST": PostServer;
+//			break;
+//			}	
 			
 			String s;
 			while ((s = inFromClient.readLine()) != null) {
