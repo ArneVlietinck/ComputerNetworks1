@@ -15,7 +15,26 @@ public class Laurasprutswerkserver {
 			String clientSentence = inFromClient.readLine();
 			System.out.println("Received: " + clientSentence);
 
-
+			//clientSentence parsen:
+			int index = clientSentence.indexOf(" ");
+			String command = clientSentence.substring(0, index);
+			System.out.println(command);
+			
+			
+			switch(command){
+			case "HEAD": HeadServer;
+			break;
+			
+			case "GET": GetServer;
+			break;
+				
+			case "PUT": PutServer;
+			break;
+			
+			case "POST": PostServer;
+			break;
+			}	
+			
 			String s;
 			while ((s = inFromClient.readLine()) != null) {
 				System.out.println(s);
@@ -49,7 +68,7 @@ public class Laurasprutswerkserver {
 			out.close();
 			inFromClient.close();
 			clientSocket.close();
-			//serverSocket.close();
+			serverSocket.close();
 		}
 	}
 }
