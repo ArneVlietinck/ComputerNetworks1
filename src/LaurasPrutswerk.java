@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -12,7 +11,7 @@ public class LaurasPrutswerk {
 		//splitsen: http://stackoverflow.com/questions/8694984/remove-part-of-string
 		//if argument == GET voer dit uit, splits de link naar host en afterslash zonder de https//:!
 		Test test = new Test();
-		test.getHTMLcode("http://www.google.com");
+		test.getHTMLcode("http://stackoverflow.com");
 		
 	}
 }
@@ -46,15 +45,16 @@ class Test{
 		//printwriter to textfile
 		PrintWriter out = new PrintWriter("lol.txt");
 		String t;
-		String lol = "";
+		String s;
 		//printen respons
 		while(!(t = br.readLine()).isEmpty()){
 			System.out.println(t);
 		}
 		System.out.println("");
 		while(br.ready()){
-			System.out.println(br.readLine());
-			out.println(t);
+			s= br.readLine();
+			System.out.println(s);
+			out.println(s);
 			out.flush();
 		}
 
@@ -62,9 +62,7 @@ class Test{
 		br.close();
 		out.close();
 		
-//		if(newAddress != ""){
-//			this.getHTMLcode(newAddress);
-//		}
+		
 		//sluiten na uitschrijven
 		
 		
