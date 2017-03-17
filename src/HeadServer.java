@@ -1,13 +1,18 @@
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Date;
 
 public class HeadServer {
-	public static void head(Socket clientSocket, BufferedReader inFromClient) throws IOException{
+	public static void head(Socket clientSocket, BufferedReader inFromClient, String path) throws IOException{
+		
+		if (path.isEmpty()){
+			path = "index.txt";
+		}
+		
+		//info client uitlezen
 		String s;
 		while ((s = inFromClient.readLine()) != null) {
 			System.out.println(s);
@@ -16,11 +21,12 @@ public class HeadServer {
 			}
 		}
 		
+		//file uitlezen
 		Date today = new Date(); 
 		PrintWriter out = new PrintWriter(clientSocket.getOutputStream());
-		File file = new File("test.txt");
-		BufferedReader htmlFile = new BufferedReader(new FileReader(file));
+		File file = new File(path);
 		
+		//headers doorsturen
 		out.println("HTTP/1.1 200 OK");
 		out.println("Content-Type: text/html");
 		out.println("Content-Length: "+file.length());
@@ -28,12 +34,7 @@ public class HeadServer {
 		out.println("");
 		out.flush();
 		
-		String t;
-		while (!(t = htmlFile.readLine()).isEmpty()) {
-			out.println(t);
-			out.flush();
-		}
-		htmlFile.close();
+		//sluiten
 		out.close();
 	}
 }
