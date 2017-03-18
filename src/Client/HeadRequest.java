@@ -21,8 +21,8 @@ public class HeadRequest {
 		//respons
 		BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
 		
-		//printwriter to textfile
-		PrintWriter out = new PrintWriter("testHead.html");
+		//printwriter to htmlfile
+		PrintWriter out = new PrintWriter("testHEAD.html");
 		String commandLineString;
 		
 		//printen respons

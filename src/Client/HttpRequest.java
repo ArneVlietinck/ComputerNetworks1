@@ -31,7 +31,7 @@ public class HttpRequest {
 		case "GET": GetRequest.get(address, port);
 		break;
 
-		case "PUT": PutRequest.put();
+		case "PUT": PutRequest.put(address, port);
 		break;
 
 		case "POST": PostRequest.post();

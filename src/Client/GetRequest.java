@@ -21,7 +21,7 @@ public class GetRequest {
 		BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
 		
 		//printwriter to htmlfile
-		PrintWriter out = new PrintWriter("test1.html");
+		PrintWriter out = new PrintWriter("testGET.html");
 		String commandLineString;
 		
 		//printen respons
