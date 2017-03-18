@@ -1,12 +1,13 @@
+package Server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class PutServer {
-	public static void put(BufferedReader inFromClient, String path) throws IOException{
+public class PostServer {
+	public static void post(BufferedReader inFromClient, String path) throws IOException{
 
 		if (path.isEmpty()){
-			path = "put.txt";
+			path = "post.txt";
 		}
 		
 		//info client uitlezen
