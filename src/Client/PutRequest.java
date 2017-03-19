@@ -20,7 +20,7 @@ public class PutRequest {
 		Socket s = new Socket(hostAddress, port);
 		//request
 		PrintWriter pw = new PrintWriter(s.getOutputStream());
-		String sentence = "PUT "+afterSlash+ " HTTP/1.1"+"\r\n" + "host: " + hostAddress + "\r\n" + "Content-Type: text/plain" + "\r\n";
+		String sentence = "PUT "+afterSlash+ " HTTP/1.1"+"\r\n" + "host: " + hostAddress + "\r\n" + "Content-Type: text/plain" + "\r\n" + "Content-Length: ";
 		System.out.print("Give Body:\r\n");
 
 		BufferedReader inputTerminal = new BufferedReader(new InputStreamReader(System.in));
