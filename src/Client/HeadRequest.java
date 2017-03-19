@@ -22,8 +22,11 @@ public class HeadRequest {
 		BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
 
 		
+		
+		//Aanmaak html file
+		File saveFile = new File("HEAD" + hostaddress + ".html");
 		//printwriter to htmlfile
-		PrintWriter out = new PrintWriter("HEAD" + hostaddress + ".html");
+		PrintWriter out = new PrintWriter(saveFile);
 		String commandLineString;
 
 		//printen respons
