@@ -12,51 +12,42 @@ import java.util.Scanner;
 public class PutRequest {
 
 	public static void put(String[] address, int port) throws UnknownHostException, IOException {
-		
-		String newAddress;
-		String hostaddress = address[0];
-		String afterSlash = address[1];
-		
-		System.out.print("Give Body: ");
-		BufferedReader inputTerminal = new BufferedReader(new InputStreamReader(System.in));
-	    String content = inputTerminal.readLine();
 
-		//BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
-		//System.out.println("Give Body: ");
-		//String content = inFromUser.readLine();
-		int length = content.length();
-		
+		String hostAddress = address[0];
+		String afterSlash = address[1];
 
 		//verbinding leggen met site.
-		Socket s = new Socket(InetAddress.getByName(hostaddress), port);
+		Socket s = new Socket(hostAddress, port);
 		//request
 		PrintWriter pw = new PrintWriter(s.getOutputStream());
-		pw.println("PUT "+afterSlash+" HTTP/1.1");
-		pw.println("Host: "+hostaddress);
-		pw.println("Content-Type: text/plain");
-		pw.println("Content-Length: " + length);
-		pw.println("");
-		pw.println(content);
-		pw.println("");
+		String sentence = "PUT "+afterSlash+ " HTTP/1.1"+"\r\n" + "host: " + hostAddress + "\r\n" + "Content-Type: text/plain" + "\r\n" + "\r\n";
+		System.out.print("Give Body:\r\n");
+
+		BufferedReader inputTerminal = new BufferedReader(new InputStreamReader(System.in));
+		String contentTerminal;
+		if((contentTerminal = inputTerminal.readLine()) != null){
+			sentence += contentTerminal;
+		}
+		System.out.println(sentence);
+		pw.print(sentence);
 		pw.flush();
+
 		//respons
 		BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
 
 		//printwriter to htmlfile
-		PrintWriter out = new PrintWriter("testPUT.html");
+		PrintWriter out = new PrintWriter("PUT"+ hostAddress +".html");
 		String commandLineString;
 
 		//printen respons
+		String htmlString = "";
 		while((commandLineString = br.readLine()) != null){
 			System.out.println(commandLineString);
-			if (commandLineString.contains("Location:")){
-				newAddress = commandLineString.replace("Location: ","");
-				System.out.println(newAddress);
-			}
 			out.println(commandLineString);
-			out.println("");
 			out.flush();
+			htmlString += commandLineString;
 		}
+
 		//sluiten na uitschrijven
 		br.close();
 		inputTerminal.close();
