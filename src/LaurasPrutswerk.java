@@ -1,6 +1,9 @@
 import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,6 +22,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
 
 public class LaurasPrutswerk {
 
@@ -81,15 +85,15 @@ class Test{
 			}
 		}
 		//System.out.println(htmlString);
-		
+
 		//sluiten na uitschrijven
 		br.close();
 		out.close();
-				
+
 		File siteFile = new File(hostAddress+ ".html");
 		saveImage(siteFile,hostAddress);
 
-		
+
 
 		//later sluiten
 		pw.close();
@@ -108,22 +112,65 @@ class Test{
 			System.out.println("Image Found!");
 			System.out.println("src attribute is : "+src);
 			if (src.length() != 0) {
-				getImages(src);
-	        } 	
+				getImages(src, site);
+			} 	
 		}
 	}
-		private static void getImages(String src) throws IOException{
-			//Exctract the name of the image from the src attribute
-			int indexname = src.lastIndexOf("/");
-			if (indexname == src.length()) {
-				src = src.substring(1, indexname);
-			}
-			indexname = src.lastIndexOf("/");
-			String name = src.substring(indexname, src.length());
-			System.out.println("name:" + name);
-			System.out.println("YES");
-			///Vanaf hier verderdoen :) 
-
+	private static void getImages(String src, String site) throws IOException{
+		//Exctract the name of the image from the src attribute
+		int indexname = src.lastIndexOf("/");
+		if (indexname == src.length()) {
+			src = src.substring(1, indexname);
 		}
-	
+		indexname = src.lastIndexOf("/");
+		String name = src.substring(indexname, src.length());
+		System.out.println("name:" + name);
+		System.out.println("YES");
+		///Vanaf hier verderdoen :) 
+
+		//Image opslaan
+		Socket socket = new Socket(site, 80);
+		DataOutputStream bw = new DataOutputStream(new DataOutputStream(socket.getOutputStream()));
+		String sentence = "GET "+src+ " HTTP/1.1"+"\r\n" + "host: " + site + "\r\n" + "Connection: close" + "\r\n" + "\r\n";
+		System.out.println(sentence);
+		bw.writeBytes(sentence);
+		bw.flush();
+		
+
+		OutputStream TESTOUTPUT = new FileOutputStream("KITTENAFBEELDING.jpg");
+		
+		
+		// Initialize the stream.
+		final InputStream inputStream = socket.getInputStream();
+
+		// Header end flag.
+		boolean headerEnded = false;
+
+		byte[] bytes = new byte[2048];
+		int length;
+		while ((length = inputStream.read(bytes)) != -1) {
+		    // If the end of the header had already been reached, write the bytes to the file as normal.
+		    if (headerEnded)
+		    	TESTOUTPUT.write(bytes, 0, length);
+
+		    // This locates the end of the header by comparing the current byte as well as the next 3 bytes
+		    // with the HTTP header end "\r\n\r\n" (which in integer representation would be 13 10 13 10).
+		    // If the end of the header is reached, the flag is set to true and the remaining data in the
+		    // currently buffered byte array is written into the file.
+		    else {
+		        for (int i = 0; i < 2045; i++) {
+		            if (bytes[i] == 13 && bytes[i + 1] == 10 && bytes[i + 2] == 13 && bytes[i + 3] == 10) {
+		                headerEnded = true;
+		                TESTOUTPUT.write(bytes, i+4, 2048-i-4);
+		                break;
+		            }
+		        }
+		    }
+		}
+		inputStream.close();
+		TESTOUTPUT.close();
+		socket.close();
+
+	}
+
 }
