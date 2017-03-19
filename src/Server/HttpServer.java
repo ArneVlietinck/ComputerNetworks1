@@ -16,7 +16,7 @@ public class HttpServer {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Stopping Server");
+		//System.out.println("Stopping Server");
 		//		server.stop();
 	}
 }
@@ -26,6 +26,7 @@ class MultiThreadedServer implements Runnable{
 	private int port;
 	private ServerSocket serverSocket = null;
 	private Thread runningThread = null;
+	private String statusCode = "";
 
 	public MultiThreadedServer(int port){
 		this.port = port;
@@ -44,12 +45,12 @@ class MultiThreadedServer implements Runnable{
 			try {
 				clientSocket = serverSocket.accept();
 			} catch (IOException e) {
+				statusCode = "500 Server Error";
 				e.printStackTrace();
 			}
 
 			new Thread(new WorkerRunnable(
 					clientSocket, "Multithreaded Server")).start();
-			System.out.println("geen idee");
 		}
 	}
 
@@ -57,7 +58,8 @@ class MultiThreadedServer implements Runnable{
 		try {
 			this.serverSocket = new ServerSocket(this.port);
 		} catch (IOException e) {
-			throw new RuntimeException("Cannot open port", e);
+			statusCode = "500 Server Error";
+			e.printStackTrace();
 		}
 	}
 }

@@ -11,7 +11,7 @@ public class HeadRequest {
 		String afterSlash = address[1];
 		
 		//verbinding leggen met site.
-		Socket s = new Socket(InetAddress.getByName(hostaddress), port);
+		Socket s = new Socket(hostaddress, port);
 		//request
 		PrintWriter pw = new PrintWriter(s.getOutputStream());
 		pw.println("HEAD "+afterSlash+" HTTP/1.1");
@@ -22,19 +22,12 @@ public class HeadRequest {
 		BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
 		
 		//printwriter to htmlfile
-		PrintWriter out = new PrintWriter("testHEAD.html");
+		PrintWriter out = new PrintWriter("HEAD"+afterSlash+".html");
 		String commandLineString;
 		
 		//printen respons
 		while((commandLineString = br.readLine()) != null){
-			System.out.println(commandLineString);
-			//TODO: Waarom zit deze extra lijn erin met nog eens de locatie maar dan zonder "Location: "
-			if (commandLineString.contains("Location:")){
-				newAddress = commandLineString.replace("Location: ","");
-				System.out.println(newAddress);
-			}
 			out.println(commandLineString);
-			out.println("");
 			out.flush();
 		}
 
