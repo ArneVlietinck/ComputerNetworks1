@@ -4,9 +4,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-
+/**
+ * This class starts a multithreaded server.
+ * 
+ * @author Laura Vranken
+ * @author Arne Vlietinck
+ */
 public class HttpServer {
 
+	/**
+	 * The main function starts the multithreaded server.
+	 * 
+	 * @throws IOException
+	 */
 	public static void main(String[] args) throws IOException {
 		MultiThreadedServer server = new MultiThreadedServer(7789);
 		new Thread(server).start();
@@ -21,6 +31,13 @@ public class HttpServer {
 	}
 }
 
+/**
+ * Create a server socket and make connection with the client socket.
+ * 
+ * @author Laura Vranken
+ * @author Arne Vlietinck
+ *
+ */
 class MultiThreadedServer implements Runnable{
 
 	private int port;
@@ -28,13 +45,21 @@ class MultiThreadedServer implements Runnable{
 	private Thread runningThread = null;
 	private String statusCode = "";
 
+	/**
+	 * Save the port number.
+	 * @param port
+	 * 		|| the port on which the server works.
+	 */
 	public MultiThreadedServer(int port){
 		this.port = port;
 	}
 
+	/**
+	 * Synchronise the running thread.
+	 * Create the server socket and make connection with a client socket.
+	 */
 	@Override
 	public void run(){
-		// TODO Auto-generated method stub
 		synchronized(this){
 			this.runningThread = Thread.currentThread();
 		}
@@ -50,10 +75,13 @@ class MultiThreadedServer implements Runnable{
 			}
 
 			new Thread(new WorkerRunnable(
-					clientSocket, "Multithreaded Server")).start();
+					clientSocket)).start();
 		}
 	}
 
+	/**
+	 * Make a new server socket on a given port number.
+	 */
 	private void openServerSocket() {
 		try {
 			this.serverSocket = new ServerSocket(this.port);
@@ -64,15 +92,30 @@ class MultiThreadedServer implements Runnable{
 	}
 }
 
-
+/**
+ * Execute the clients request by retrieving it and redirecting to the right class: GET, HEAD, PUT, POST.
+ * 
+ * @author Laura Vranken
+ * @author Arne Vlietinck
+ *
+ */
 class WorkerRunnable implements Runnable{
 
 	private Socket clientSocket = null;
 
-	public WorkerRunnable(Socket clientSocket, String serverText){
+	/**
+	 * Save the client socket.
+	 * @param clientSocket
+	 * 		|| socket to connect with client.
+	 */
+	public WorkerRunnable(Socket clientSocket){
 		this.clientSocket = clientSocket;
 	}
 
+	/**
+	 * Read the input request from the client, parse it into the HTTP command and path.
+	 * The HTTP command will be worked out in one of the specified classes.
+	 */
 	@Override
 	public void run(){
 		BufferedReader inFromClient = null;
