@@ -34,11 +34,10 @@ public class HttpRequest {
 		case "PUT": PutRequest.put(address, port);
 		break;
 
-		case "POST": PostRequest.post();
+		case "POST": PostRequest.post(address, port);
 		break;
 		
-		//TODO: check how to throw illegalArgument.
-		default: throw new IllegalArgumentException("Illegal HTTPCommand");
+		default: System.out.println("This HTTPCommand is not supported.");
 		}
 	}
 

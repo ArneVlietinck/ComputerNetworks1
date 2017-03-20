@@ -9,7 +9,7 @@ import java.net.UnknownHostException;
 
 public class PostRequest {
 
-	public static void put(String[] address, int port) throws UnknownHostException, IOException {
+	public static void post(String[] address, int port) throws UnknownHostException, IOException {
 
 		String hostAddress = address[0];
 		String afterSlash = address[1];
