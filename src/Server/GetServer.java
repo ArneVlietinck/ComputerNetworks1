@@ -51,11 +51,11 @@ public class GetServer {
 				out.println(t);
 				out.flush();
 			}
-			
-			ImageRecognition.searchImageServer(file,clientSocket);
 
 			//file lezen sluiten
 			htmlFile.close();
+			
+			ImageRecognition.searchImageServer(file,clientSocket);
 
 		}catch(Exception e){
 			statusCode = "404 Not Found";

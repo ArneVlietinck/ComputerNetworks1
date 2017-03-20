@@ -170,15 +170,15 @@ public class ImageRecognition {
 		File readImage = new File("Image_" + name);
 		InputStream imageInput = new FileInputStream(readImage);
 		//doorsturen
-		OutputStream toSocket =socket.getOutputStream();
+		DataOutputStream toSocket =new DataOutputStream(socket.getOutputStream());
 
 		byte[] buffer = new byte[2048];
 		int bytesRead;
 		while((bytesRead = imageInput.read(buffer))!= -1){
 			toSocket.write(buffer,0,bytesRead);
+			toSocket.flush();
 		}
 		imageInput.close();
-		toSocket.flush();
 		toSocket.close();
 	}
 }
