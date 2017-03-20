@@ -1,7 +1,11 @@
 package imageRecognition;
 
+import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,13 +20,13 @@ import org.jsoup.select.Elements;
 
 
 /**
-* This class handles image recognition.
-* 
-* @author Laura Vranken
-* @author Arne Vlietinck
-*/
+ * This class handles image recognition.
+ * 
+ * @author Laura Vranken
+ * @author Arne Vlietinck
+ */
 public class ImageRecognition {
-	
+
 	/**
 	 * Search images in a HTMLfile.
 	 * 
@@ -34,20 +38,20 @@ public class ImageRecognition {
 	 * 			| if (src.length() != 0) {
 	 *			| 	System.out.println("Image Found");
 	 *			|	System.out.println("The src is: " + src);
-     *			| } 
+	 *			| } 
 	 * @post	If the length of the image src is not 0 then the image will be get. 
 	 * 			| if (src.length() != 0) {
 	 *			| 	getImages(src, site);
-     *			| } 
+	 *			| } 
 	 * @throws	IOException
 	 */
 	public static void searchImage(File fileToParse, String hostAddress) throws IOException {
 		//Parse the file.
 		Document doc = Jsoup.parse(fileToParse,"UTF-8", hostAddress);
-		
+
 		//Get all elements with img tag 
 		Elements images = doc.select("img");
-		
+
 		for (Element el : images) {
 			//For each element get the src url
 			String src = el.attr("src");
@@ -58,7 +62,7 @@ public class ImageRecognition {
 			} 	
 		}
 	}
-	
+
 	/**
 	 * Return the image name with extension.
 	 * 
@@ -76,7 +80,7 @@ public class ImageRecognition {
 	public static void getImages(String src, String hostAddress) throws IOException{
 
 		String name = getImageName(src);
-		
+
 		//Get image
 		Socket socket = new Socket(hostAddress, 80);
 		DataOutputStream bw = new DataOutputStream(new DataOutputStream(socket.getOutputStream()));
@@ -120,7 +124,7 @@ public class ImageRecognition {
 		imageOutput.close();
 		socket.close();
 	}
-	
+
 	/**
 	 * Return the image name with extension.
 	 * 
@@ -129,7 +133,7 @@ public class ImageRecognition {
 	 * @return	The name of the image without "/", but with the extension.
 	 */
 	public static String getImageName(String src){
-		
+
 		//Exctract the name of the image from the src attribute
 		int indexname = src.lastIndexOf("/");
 		if (indexname == src.length()) {
@@ -139,5 +143,42 @@ public class ImageRecognition {
 		//Name without "/", but with extension. e.g. TestImage.png
 		String name = src.substring(indexname+1, src.length());
 		return name;
+	}
+
+	public static void searchImageServer(File fileToParse, Socket socket) throws IOException {
+		//Parse the file.
+		Document doc =Jsoup.parse(fileToParse, "UTF-8");
+
+		//Get all elements with img tag 
+		Elements images = doc.select("img");
+
+		for (Element el : images) {
+			//For each element get the src url
+			String src = el.attr("src");
+			if (src.length() != 0) {
+				System.out.println("Image Found");
+				System.out.println("The src is: " + src);
+				sendImage(src, socket);
+			} 	
+		}
+	}
+
+	public static void sendImage(String src, Socket socket) throws IOException{
+		//ophalen
+		String name = getImageName(src);
+		System.out.println("NAAM" + name);
+		File readImage = new File("Image_" + name);
+		InputStream imageInput = new FileInputStream(readImage);
+		//doorsturen
+		OutputStream toSocket =socket.getOutputStream();
+
+		byte[] buffer = new byte[2048];
+		int bytesRead;
+		while((bytesRead = imageInput.read(buffer))!= -1){
+			toSocket.write(buffer,0,bytesRead);
+		}
+		imageInput.close();
+		toSocket.flush();
+		toSocket.close();
 	}
 }

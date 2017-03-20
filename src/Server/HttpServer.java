@@ -18,7 +18,7 @@ public class HttpServer {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
-		MultiThreadedServer server = new MultiThreadedServer(7789);
+		MultiThreadedServer server = new MultiThreadedServer(7788);
 		new Thread(server).start();
 
 		try {

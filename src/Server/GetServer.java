@@ -7,6 +7,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Date;
 
+import imageRecognition.ImageRecognition;
+
 public class GetServer {
 	public static void get(Socket clientSocket, BufferedReader inFromClient, String path) throws IOException{
 
@@ -16,14 +18,14 @@ public class GetServer {
 			path = "index.txt";
 		}
 
-		//info client inlezen
-		String s;
-		while ((s = inFromClient.readLine()) != null) {
-			System.out.println(s);
-			if (s.isEmpty()) {
-				break;
-			}
-		}
+//		//info client inlezen
+//		String s;
+//		while ((s = inFromClient.readLine()) != null) {
+//			System.out.println(s);
+//			if (s.isEmpty()) {
+//				break;
+//			}
+//		}
 
 		//file ophalen
 		Date today = new Date(); 
@@ -40,14 +42,17 @@ public class GetServer {
 			out.println("Content-Length: "+file.length());
 			out.println("Date: "+today);
 			out.println("");
-			out.flush();		
-
+			out.flush();	
+			
+			
 			//file uitlezen en doorsturen
 			String t;
 			while ((t = htmlFile.readLine()) != null) {
 				out.println(t);
 				out.flush();
 			}
+			
+			ImageRecognition.searchImageServer(file,clientSocket);
 
 			//file lezen sluiten
 			htmlFile.close();

@@ -43,7 +43,7 @@ public class GetRequest {
 		BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
 
 		//Create htmlfile
-		File saveFile = new File("GET" + hostAddress + ".html");
+		File saveFile = new File(hostAddress + ".html");
 		
 		//Printwriter to htmlfile
 		PrintWriter out = new PrintWriter(saveFile);
