@@ -1,8 +1,5 @@
 package imageRecognition;
 
-import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -79,7 +76,7 @@ public class ImageRecognition {
 	 */
 	public static void getImages(String src, String hostAddress) throws IOException{
 
-		String name = getImageName(src);
+		String name = src;
 
 		//Get image
 		Socket socket = new Socket(hostAddress, 80);
@@ -90,7 +87,10 @@ public class ImageRecognition {
 		bw.flush();
 
 		//Create image file
-		File saveImage = new File("Image_" + name);
+		File f = new File(name);
+		String filePath = f.getPath().toString();
+		System.out.println("."+filePath);
+		File saveImage = new File("."+filePath);
 		//Printwriter to image file
 		OutputStream imageOutput = new FileOutputStream(saveImage);
 

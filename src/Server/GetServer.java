@@ -55,7 +55,7 @@ public class GetServer {
 			//file lezen sluiten
 			htmlFile.close();
 			
-			ImageRecognition.searchImageServer(file,clientSocket);
+			//ImageRecognition.searchImageServer(file,clientSocket);
 
 		}catch(Exception e){
 			statusCode = "404 Not Found";
