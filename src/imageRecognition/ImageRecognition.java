@@ -69,6 +69,7 @@ public class ImageRecognition {
 	 * @post	The image is saved in a local file.
 	 * 			The conventions for the file are "Image_" + name.
 	 * @throws	IOException
+	 * @source	http://stackoverflow.com/questions/33576510/how-to-download-an-image-with-a-java-socket-http-1-1-request
 	 */
 	public static void getImages(String src, String hostAddress) throws IOException{
 
