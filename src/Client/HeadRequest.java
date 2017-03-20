@@ -2,6 +2,12 @@ package Client;
 import java.io.*;
 import java.net.*;
 
+/**
+ * This class handles a HEAD request.
+ * 
+ * @author Laura Vranken
+ * @author Arne Vlietinck
+ */
 public class HeadRequest {
 
 	/**

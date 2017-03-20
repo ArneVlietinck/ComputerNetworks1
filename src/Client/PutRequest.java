@@ -11,10 +11,7 @@ import java.util.Scanner;
 
 public class PutRequest {
 
-	public static void put(String[] address, int port) throws UnknownHostException, IOException {
-
-		String hostAddress = address[0];
-		String afterSlash = address[1];
+	public static void put(String hostAddress, String afterSlash, int port) throws UnknownHostException, IOException {
 
 		//verbinding leggen met site.
 		Socket s = new Socket(hostAddress, port);
