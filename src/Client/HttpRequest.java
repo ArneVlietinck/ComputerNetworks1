@@ -16,10 +16,11 @@ public class HttpRequest {
 			httpCommand = args[0];
 			uri = args[1];
 			port = 80;
+		}else{
+			httpCommand = args[0];
+			uri = args[1];
+			port = Integer.parseInt(args[2]);
 		}
-		httpCommand = args[0];
-		uri = args[1];
-		port = Integer.parseInt(args[2]);
 
 		//string splitsen
 		String[] address = splitsUri(uri);
@@ -36,7 +37,7 @@ public class HttpRequest {
 
 		case "POST": PostRequest.post(address, port);
 		break;
-		
+
 		default: System.out.println("This HTTPCommand is not supported.");
 		}
 	}
