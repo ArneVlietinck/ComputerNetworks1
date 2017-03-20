@@ -4,43 +4,51 @@ import java.net.*;
 
 public class HeadRequest {
 
-	public static void head(String[] address, int port) throws UnknownHostException, IOException {
+	/**
+	 * Launch the head request. The response received from the HTTP server is displayed on the terminal. 
+	 * It is also saved in a HTMLfile locally.
+	 * 
+	 * @param 	hostAddress
+	 * 			The hostAddress of the address to connect with.
+	 * @param	afterSlash
+	 * 			The address after the slash of the address to connect with.
+	 * @param	port
+	 * 			The number of the port to connect with. 
+	 * @post	The head of the requested site will be printed in the terminal.
+	 * @post	The head of the requested site will be saved in a HTMLfile.
+	 * 			The conventions for the file are "HEAD" + hostAddress + ".html".
+	 */
+	public static void head(String hostAddress, String afterSlash, int port) throws UnknownHostException, IOException {
 
-		String hostaddress = address[0];
-		String afterSlash = address[1];
-
-		//verbinding leggen met site.
-		Socket s = new Socket(hostaddress, port);
-		//request
+		//Create socket
+		Socket s = new Socket(hostAddress, port);
+		
+		//Request
 		PrintWriter pw = new PrintWriter(s.getOutputStream());
-		pw.println("HEAD " + afterSlash + " HTTP/1.1");
-		pw.println("Host: " + hostaddress);
-		pw.println("");
+		String sentence = "HEAD "+ afterSlash + " HTTP/1.1"+"\r\n" + "host: " + hostAddress + "\r\n" + "\r\n";
+		pw.print(sentence);
 		pw.flush();
 		
-		//respons
+		//Respons
 		BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
-
 		
+		//Create htmlfile
+		File saveFile = new File("HEAD" + hostAddress + ".html");
 		
-		//Aanmaak html file
-		File saveFile = new File("HEAD" + hostaddress + ".html");
-		//printwriter to htmlfile
+		//Printwriter to htmlfile
 		PrintWriter out = new PrintWriter(saveFile);
 		String commandLineString;
 
-		//printen respons
+		//Print the respons
 		while((commandLineString = br.readLine()) != null){
 			System.out.println(commandLineString);
 			out.println(commandLineString);
 			out.flush();
 		}
 
-		//sluiten na uitschrijven
+		//Close
 		br.close();
 		out.close();
-
-		//later sluiten
 		pw.close();
 		s.close();
 	}

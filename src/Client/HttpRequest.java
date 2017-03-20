@@ -90,37 +90,37 @@ public class HttpRequest {
 	 * @param 	httpCommand
 	 * 			The httpCommand to launch.
 	 * @param	address
-	 * 			The address contains the hostAddress and afterSlash.
+	 * 			The address array contains the hostAddress and afterSlash.
 	 * @param	port
 	 * 			The number of the port to connect with. 
 	 * @post	If the httpCommand is "HEAD",
 	 * 			the headRequest is launched.
-	 * 			| case "HEAD": HeadRequest.head(address, port);
+	 * 			| case "HEAD": HeadRequest.head(address[0], address[1], port);
 	 * @post	If the httpCommand is "GET",
 	 * 			the getRequest is launched.
-	 * 			| case "GET": GetRequest.get(address, port);
+	 * 			| case "GET": GetRequest.get(address[0], address[1], port);
 	 * @post	If the httpCommand is "PUT",
 	 * 			the putRequest is launched.
-	 * 			| case "PUT": PutRequest.put(address, port);
+	 * 			| case "PUT": PutRequest.put(address[0], address[1], port);
 	 * @post	If the httpCommand is "POST",
 	 * 			the postRequest is launched.
-	 * 			| case "POST": PostRequest.post(address, port);
+	 * 			| case "POST": PostRequest.post(address[0], address[1], port);
 	 * @post	If the httpCommand is not "HEAD", "GET", "PUT" or "POST",
 	 * 			the system prints "This HTTPCommand is not supported".
 	 * 			| default: System.out.println("This HTTPCommand is not supported.");
 	 */
 	public static void checkHTTPCommand(String httpCommand, String[] address, int port) throws UnknownHostException, IOException{
 		switch(httpCommand){
-		case "HEAD": HeadRequest.head(address, port);
+		case "HEAD": HeadRequest.head(address[0], address[1], port);
 		break;
 
-		case "GET": GetRequest.get(address, port);
+		case "GET": GetRequest.get(address[0], address[1], port);
 		break;
 
-		case "PUT": PutRequest.put(address, port);
+		case "PUT": PutRequest.put(address[0], address[1], port);
 		break;
 
-		case "POST": PostRequest.post(address, port);
+		case "POST": PostRequest.post(address[0], address[1], port);
 		break;
 
 		default: System.out.println("This HTTPCommand is not supported.");
