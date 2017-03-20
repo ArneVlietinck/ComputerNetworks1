@@ -13,10 +13,16 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+/**
+* This class handles image recognition.
+* 
+* @author Laura Vranken
+* @author Arne Vlietinck
+*/
 public class ImageRecognition {
 	
 	/**
-	 * The image is searched in the HTMLfile created in the get function.
+	 * Search images in a HTMLfile.
 	 * 
 	 * @param 	fileToParse
 	 * 			The local file to parse.
