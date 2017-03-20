@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -77,6 +79,7 @@ public class ImageRecognition {
 	public static void getImages(String src, String hostAddress) throws IOException{
 
 		String name = src;
+		String imageName = getImageName(src);
 
 		//Get image
 		Socket socket = new Socket(hostAddress, 80);
@@ -87,16 +90,24 @@ public class ImageRecognition {
 		bw.flush();
 
 		//Create image file
-		File f = new File(name);
-		String filePath = f.getPath().toString();
-		System.out.println("."+filePath);
-		File saveImage = new File("."+filePath);
-		//Printwriter to image file
+		
+		//Gives the relative path
+		Path currentRelativePath = Paths.get("");
+		String currentDirectory = currentRelativePath.toAbsolutePath().toString();
+		//System.out.println("Current relative path is: " + currentDirectory);
+		
+		//Make directories for imageFile
+		String directoryName = name.replace(imageName, "");
+		File directories = new File(currentDirectory+directoryName);
+		directories.mkdirs();
+		
+		//Make imageFile in the created directories
+		File saveImage = new File(currentDirectory+name);
 		OutputStream imageOutput = new FileOutputStream(saveImage);
-
+		
 		// Initialize the stream.
 		final InputStream inputStream = socket.getInputStream();
-
+		
 		// Header end flag.
 		boolean headerEnded = false;
 
@@ -130,7 +141,7 @@ public class ImageRecognition {
 	 * 
 	 * @param 	src
 	 * 			The src of the image.
-	 * @return	The name of the image without "/", but with the extension.
+	 * @return	The name of the image wit "/" and with the extension.
 	 */
 	public static String getImageName(String src){
 
@@ -140,8 +151,8 @@ public class ImageRecognition {
 			src = src.substring(1, indexname);
 		}
 		indexname = src.lastIndexOf("/");
-		//Name without "/", but with extension. e.g. TestImage.png
-		String name = src.substring(indexname+1, src.length());
+		//Name with "/", but with extension. e.g. /TestImage.png
+		String name = src.substring(indexname, src.length());
 		return name;
 	}
 
@@ -164,10 +175,16 @@ public class ImageRecognition {
 	}
 
 	public static void sendImage(String src, Socket socket) throws IOException{
+		
+		//Gives the relative path
+		Path currentRelativePath = Paths.get("");
+		String currentDirectory = currentRelativePath.toAbsolutePath().toString();
+		
 		//ophalen
-		String name = getImageName(src);
-		System.out.println("NAAM" + name);
-		File readImage = new File("Image_" + name);
+		String name = src;
+		String imageName = getImageName(src);
+		String fullpath = currentDirectory+name;
+		File readImage = new File(fullpath);
 		InputStream imageInput = new FileInputStream(readImage);
 		//doorsturen
 		DataOutputStream toSocket =new DataOutputStream(socket.getOutputStream());
