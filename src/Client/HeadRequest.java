@@ -17,6 +17,8 @@ public class HeadRequest {
 	 * @post	The head of the requested site will be printed in the terminal.
 	 * @post	The head of the requested site will be saved in a HTMLfile.
 	 * 			The conventions for the file are "HEAD" + hostAddress + ".html".
+	 * @throws	UnknownHostException
+	 * @throws	IOException
 	 */
 	public static void head(String hostAddress, String afterSlash, int port) throws UnknownHostException, IOException {
 
