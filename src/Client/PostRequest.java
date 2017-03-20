@@ -16,7 +16,7 @@ import java.net.UnknownHostException;
 public class PostRequest {
 	
 	/**
-	 * Launch the post request. The response received from the HTTP server is displayed on the terminal. 
+	 * Launch the post request. The response received from the HTTP server is displayed on the command line. 
 	 * It is also saved in a HTMLfile locally.
 	 * 
 	 * @param 	hostAddress
@@ -26,7 +26,7 @@ public class PostRequest {
 	 * @param	port
 	 * 			The number of the port to connect with. 
 	 * @post	The input in the command line is read and is used as body for the post request.
-	 * @post	The post response of the requested site will be printed in the terminal.
+	 * @post	The post response of the requested site will be printed in the command line.
 	 * @post	The post response of the requested site will be saved in a HTMLfile.
 	 * 			The conventions for the file are "POST" + hostAddress + ".html".
 	 * @throws	UnknownHostException

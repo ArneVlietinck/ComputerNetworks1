@@ -11,7 +11,7 @@ import java.net.*;
 public class HeadRequest {
 
 	/**
-	 * Launch the head request. The response received from the HTTP server is displayed on the terminal. 
+	 * Launch the head request. The response received from the HTTP server is displayed on the command line. 
 	 * It is also saved in a HTMLfile locally.
 	 * 
 	 * @param 	hostAddress
@@ -20,7 +20,7 @@ public class HeadRequest {
 	 * 			The address after the slash of the address to connect with.
 	 * @param	port
 	 * 			The number of the port to connect with. 
-	 * @post	The head of the requested site will be printed in the terminal.
+	 * @post	The head of the requested site will be printed in the command line.
 	 * @post	The head of the requested site will be saved in a HTMLfile.
 	 * 			The conventions for the file are "HEAD" + hostAddress + ".html".
 	 * @throws	UnknownHostException
