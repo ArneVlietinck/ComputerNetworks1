@@ -94,7 +94,7 @@ class WorkerRunnable implements Runnable{
 			//clientSentence parsen:
 			int index = clientSentence.indexOf(" ");
 			String command = clientSentence.substring(0, index);
-			System.out.println(command);
+			//System.out.println(command);
 
 			//path parsen
 			String path;
@@ -104,12 +104,11 @@ class WorkerRunnable implements Runnable{
 			//Http
 			int indexSlash = clientSentence.lastIndexOf("/");
 			http = clientSentence.substring(indexSlash+1, clientSentence.length());
-			System.out.println(http + "HTTTTTP");
+			//System.out.println(http + "HTTTTTP");
 
 			switch(command){
 			case "HEAD": HeadServer.head(clientSocket, inFromClient, out, path, http);
 			break;
-
 
 			case "GET": GetServer.get(clientSocket, inFromClient, out, path, http);
 			break;

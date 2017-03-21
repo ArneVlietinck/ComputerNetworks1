@@ -24,7 +24,7 @@ public class GetRequest {
 	 * 			The number of the port to connect with. 
 	 * @post	The get response of the requested site will be printed in the command line.
 	 * @post	The get response (without header) of the requested site will be saved in a HTMLfile.
-	 * 			The conventions for the file are "GET" + hostAddress + ".html".
+	 * 			The conventions for the file are hostAddress + ".html".
 	 * @throws	UnknownHostException
 	 * @throws	IOException
 	 */
