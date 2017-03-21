@@ -43,7 +43,8 @@ public class GetRequest {
 		BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
 
 		//Create htmlfile
-		File saveFile = new File(hostAddress + ".html");
+		String hostAddressWithout = hostAddress.replace(".", "");
+		File saveFile = new File(hostAddressWithout + ".html");
 		
 		//Printwriter to htmlfile
 		PrintWriter out = new PrintWriter(saveFile);
@@ -54,7 +55,7 @@ public class GetRequest {
 		boolean startHtmlFound = false;
 		while((commandLineString = br.readLine()) != null){
 			System.out.println(commandLineString);
-			if (commandLineString.indexOf("html>") != -1){
+			if (commandLineString.contains(" html")){
 				startHtmlFound = true;
 			}
 			if(startHtmlFound){

@@ -58,7 +58,9 @@ public class ImageRecognition {
 			if (src.length() != 0) {
 				System.out.println("Image Found");
 				System.out.println("The src is: " + src);
-				getImages(src, hostAddress);
+				int index = src.indexOf("/");
+				String fileSrc = src.substring(index, src.length());
+				getImages(fileSrc, hostAddress);
 			} 	
 		}
 	}
@@ -91,37 +93,35 @@ public class ImageRecognition {
 		bw.flush();
 
 		//Create image file
-		
+
 		//Gives the relative path
 		Path currentRelativePath = Paths.get("");
 		String currentDirectory = currentRelativePath.toAbsolutePath().toString();
 		//System.out.println("Current relative path is: " + currentDirectory);
-		
+
 		//Make directories for imageFile
 		name = name.replace("http://", "");
 		String directoryName = name.replace(imageName, "");
 		System.out.println("directory name " + directoryName);
 		File directories = new File(currentDirectory+"/"+directoryName);
 		directories.mkdirs();
-		
+
 		//Make imageFile in the created directories
 		File saveImage = new File(currentDirectory+"/"+name);
 		DataOutputStream imageOutput = new DataOutputStream(new FileOutputStream(saveImage));
-		
+
 		// Initialize the stream.
 		InputStream inputStream = new DataInputStream(socket.getInputStream());
-		
+
 		// Header end flag.
 		boolean headerEnded = false;
-		System.out.println("LOOOOOOOOOOOL");
 		byte[] bytes = new byte[2048];
 		int length;
 		while ((length = inputStream.read(bytes)) != -1) {
-			System.out.println(length);
-			System.out.println("IHHIHIHIH");
+			System.out.println("Length: " + length);
 			// If the end of the header had already been reached, write the bytes to the file as normal.
 			if (headerEnded){
-				System.out.println(bytes[0]);
+				//System.out.println(bytes[0]);
 				imageOutput.write(bytes, 0, length);
 			}
 			// This locates the end of the header by comparing the current byte as well as the next 3 bytes
