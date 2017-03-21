@@ -1,0 +1,4 @@
+<html>
+<h1>INDEX PAGINA</h1>
+<p> Geef een path mee </p>
+</html>
