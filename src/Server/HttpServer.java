@@ -2,6 +2,7 @@ package Server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 /**
@@ -12,85 +13,44 @@ import java.net.Socket;
  */
 public class HttpServer {
 
+	private static ServerSocket serverSocket = null;
+	private static String statusCode = "";
+
 	/**
 	 * The main function starts the multithreaded server.
 	 * 
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
-		MultiThreadedServer server = new MultiThreadedServer(7788);
-		new Thread(server).start();
-
-		try {
-			Thread.sleep(20 * 1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		//System.out.println("Stopping Server");
-		//		server.stop();
-	}
-}
-
-/**
- * Create a server socket and make connection with the client socket.
- * 
- * @author Laura Vranken
- * @author Arne Vlietinck
- *
- */
-class MultiThreadedServer implements Runnable{
-
-	private int port;
-	private ServerSocket serverSocket = null;
-	private Thread runningThread = null;
-	private String statusCode = "";
-
-	/**
-	 * Save the port number.
-	 * @param port
-	 * 		|| the port on which the server works.
-	 */
-	public MultiThreadedServer(int port){
-		this.port = port;
-	}
-
-	/**
-	 * Synchronize the running thread.
-	 * Create the server socket and make connection with a client socket.
-	 */
-	@Override
-	public void run(){
-		synchronized(this){
-			this.runningThread = Thread.currentThread();
-		}
-		this.openServerSocket();
-
+		openServerSocket();
+		
 		while(true){
 			Socket clientSocket = null;
 			try {
 				clientSocket = serverSocket.accept();
+				new Thread(new WorkerRunnable(
+						clientSocket)).start();
 			} catch (IOException e) {
 				statusCode = "500 Server Error";
 				e.printStackTrace();
 			}
-
-			new Thread(new WorkerRunnable(
-					clientSocket)).start();
 		}
 	}
-
+	
 	/**
 	 * Make a new server socket on a given port number.
 	 */
-	private void openServerSocket() {
+	private static void openServerSocket() {
 		try {
-			this.serverSocket = new ServerSocket(this.port);
+			serverSocket = new ServerSocket(7777);
 		} catch (IOException e) {
 			statusCode = "500 Server Error";
 			e.printStackTrace();
 		}
 	}
 }
+
+
 
 /**
  * Execute the clients request by retrieving it and redirecting to the right class: GET, HEAD, PUT, POST.
@@ -102,14 +62,20 @@ class MultiThreadedServer implements Runnable{
 class WorkerRunnable implements Runnable{
 
 	private Socket clientSocket = null;
+	private BufferedReader inFromClient;
+	private PrintWriter out = null;
 
 	/**
 	 * Save the client socket.
 	 * @param clientSocket
 	 * 		|| socket to connect with client.
+	 * @throws IOException 
 	 */
-	public WorkerRunnable(Socket clientSocket){
+	public WorkerRunnable(Socket clientSocket) throws IOException{
 		this.clientSocket = clientSocket;
+		inFromClient = new BufferedReader(new InputStreamReader (clientSocket.getInputStream()));;
+		out = new PrintWriter(clientSocket.getOutputStream());
+		
 	}
 
 	/**
@@ -118,10 +84,9 @@ class WorkerRunnable implements Runnable{
 	 */
 	@Override
 	public void run(){
-		BufferedReader inFromClient = null;
+		System.out.println("run");
 		String clientSentence = "";
 		try {
-			inFromClient = new BufferedReader(new InputStreamReader (clientSocket.getInputStream()));
 			clientSentence = inFromClient.readLine();
 			System.out.println("Received: " + clientSentence);
 
@@ -142,10 +107,11 @@ class WorkerRunnable implements Runnable{
 
 
 			switch(command){
-			case "HEAD": HeadServer.head(clientSocket, inFromClient, path, http);
+			case "HEAD": HeadServer.head(clientSocket, inFromClient, out, path, http);
 				break;
 
-			case "GET": GetServer.get(clientSocket, inFromClient, path, http);
+				
+			case "GET": GetServer.get(clientSocket, inFromClient, out, path, http);
 				break;
 
 			case "PUT": PutServer.put(inFromClient, path, http);
@@ -159,6 +125,7 @@ class WorkerRunnable implements Runnable{
 			e.printStackTrace();
 		}
 
+		run();
 		//inFromClient.close();
 		//clientSocket.close();
 		//serverSocket.close();

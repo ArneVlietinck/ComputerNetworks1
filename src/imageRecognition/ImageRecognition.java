@@ -1,5 +1,6 @@
 package imageRecognition;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -97,26 +98,32 @@ public class ImageRecognition {
 		//System.out.println("Current relative path is: " + currentDirectory);
 		
 		//Make directories for imageFile
+		name = name.replace("http://", "");
 		String directoryName = name.replace(imageName, "");
-		File directories = new File(currentDirectory+directoryName);
+		System.out.println("directory name " + directoryName);
+		File directories = new File(currentDirectory+"/"+directoryName);
 		directories.mkdirs();
 		
 		//Make imageFile in the created directories
-		File saveImage = new File(currentDirectory+name);
-		OutputStream imageOutput = new FileOutputStream(saveImage);
+		File saveImage = new File(currentDirectory+"/"+name);
+		DataOutputStream imageOutput = new DataOutputStream(new FileOutputStream(saveImage));
 		
 		// Initialize the stream.
-		final InputStream inputStream = socket.getInputStream();
+		InputStream inputStream = new DataInputStream(socket.getInputStream());
 		
 		// Header end flag.
 		boolean headerEnded = false;
-
+		System.out.println("LOOOOOOOOOOOL");
 		byte[] bytes = new byte[2048];
 		int length;
 		while ((length = inputStream.read(bytes)) != -1) {
+			System.out.println(length);
+			System.out.println("IHHIHIHIH");
 			// If the end of the header had already been reached, write the bytes to the file as normal.
-			if (headerEnded)
+			if (headerEnded){
+				System.out.println(bytes[0]);
 				imageOutput.write(bytes, 0, length);
+			}
 			// This locates the end of the header by comparing the current byte as well as the next 3 bytes
 			// with the HTTP header end "\r\n\r\n" (which in integer representation would be 13 10 13 10).
 			// If the end of the header is reached, the flag is set to true and the remaining data in the
@@ -150,52 +157,15 @@ public class ImageRecognition {
 		if (indexname == src.length()) {
 			src = src.substring(1, indexname);
 		}
+		String name = src;
+		try{
 		indexname = src.lastIndexOf("/");
 		//Name with "/", but with extension. e.g. /TestImage.png
-		String name = src.substring(indexname, src.length());
+		name = src.substring(indexname, src.length());
+		}catch(Exception e){
+			name = src;
+		}
+		System.out.println("NAAM "+ name);
 		return name;
-	}
-
-	public static void searchImageServer(File fileToParse, Socket socket) throws IOException {
-		//Parse the file.
-		Document doc =Jsoup.parse(fileToParse, "UTF-8");
-
-		//Get all elements with img tag 
-		Elements images = doc.select("img");
-
-		for (Element el : images) {
-			//For each element get the src url
-			String src = el.attr("src");
-			if (src.length() != 0) {
-				System.out.println("Image Found");
-				System.out.println("The src is: " + src);
-				sendImage(src, socket);
-			} 	
-		}
-	}
-
-	public static void sendImage(String src, Socket socket) throws IOException{
-		
-		//Gives the relative path
-		Path currentRelativePath = Paths.get("");
-		String currentDirectory = currentRelativePath.toAbsolutePath().toString();
-		
-		//ophalen
-		String name = src;
-		String imageName = getImageName(src);
-		String fullpath = currentDirectory+name;
-		File readImage = new File(fullpath);
-		InputStream imageInput = new FileInputStream(readImage);
-		//doorsturen
-		DataOutputStream toSocket =new DataOutputStream(socket.getOutputStream());
-
-		byte[] buffer = new byte[2048];
-		int bytesRead;
-		while((bytesRead = imageInput.read(buffer))!= -1){
-			toSocket.write(buffer,0,bytesRead);
-			toSocket.flush();
-		}
-		imageInput.close();
-		toSocket.close();
 	}
 }

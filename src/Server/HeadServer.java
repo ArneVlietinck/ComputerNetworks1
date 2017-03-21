@@ -24,7 +24,7 @@ public class HeadServer {
 	 * 			The path of the file which has to be retrieved.
 	 * @throws IOException
 	 */
-	public static void head(Socket clientSocket, BufferedReader inFromClient, String path, String http) throws IOException{
+	public static void head(Socket clientSocket, BufferedReader inFromClient, PrintWriter out, String path, String http) throws IOException{
 
 		String statusCode = "";
 
@@ -43,9 +43,7 @@ public class HeadServer {
 				break;
 			}
 		}
-		
-		PrintWriter out = new PrintWriter(clientSocket.getOutputStream());
-		
+				
 		if(noHeader == false && http == "1.0"){
 			out.println("HTTP/1.0 400 Bad Request");
 		}
