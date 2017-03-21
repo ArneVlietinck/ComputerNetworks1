@@ -65,7 +65,9 @@ public class HeadServer {
 			out.flush();
 		}
 
-		//sluiten
-		//out.close();
+		//close connection when HTTP/1.0 is used.
+		if (http == "1.0"){
+			out.close();
+		}
 	}
 }
