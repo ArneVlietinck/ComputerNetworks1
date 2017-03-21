@@ -23,7 +23,7 @@ public class HttpServer {
 	 */
 	public static void main(String[] args) throws IOException {
 		openServerSocket();
-		
+
 		while(true){
 			Socket clientSocket = null;
 			try {
@@ -36,13 +36,13 @@ public class HttpServer {
 			}
 		}
 	}
-	
+
 	/**
 	 * Make a new server socket on a given port number.
 	 */
 	private static void openServerSocket() {
 		try {
-			serverSocket = new ServerSocket(7777);
+			serverSocket = new ServerSocket(7778);
 		} catch (IOException e) {
 			statusCode = "500 Server Error";
 			e.printStackTrace();
@@ -75,7 +75,7 @@ class WorkerRunnable implements Runnable{
 		this.clientSocket = clientSocket;
 		inFromClient = new BufferedReader(new InputStreamReader (clientSocket.getInputStream()));;
 		out = new PrintWriter(clientSocket.getOutputStream());
-		
+
 	}
 
 	/**
@@ -86,6 +86,7 @@ class WorkerRunnable implements Runnable{
 	public void run(){
 		System.out.println("run");
 		String clientSentence = "";
+		String http = "";
 		try {
 			clientSentence = inFromClient.readLine();
 			System.out.println("Received: " + clientSentence);
@@ -99,35 +100,41 @@ class WorkerRunnable implements Runnable{
 			String path;
 			int endindex = clientSentence.indexOf(" ", index+1);
 			path = clientSentence.substring(index+2,endindex);
-			
+
 			//Http
-			String http;
 			int indexSlash = clientSentence.lastIndexOf("/");
 			http = clientSentence.substring(indexSlash+1, clientSentence.length());
-
+			System.out.println(http + "HTTTTTP");
 
 			switch(command){
 			case "HEAD": HeadServer.head(clientSocket, inFromClient, out, path, http);
-				break;
+			break;
 
-				
+
 			case "GET": GetServer.get(clientSocket, inFromClient, out, path, http);
-				break;
+			break;
 
 			case "PUT": PutServer.put(inFromClient, path, http);
-				break;
+			break;
 
 			case "POST": PostServer.post(inFromClient, path, http);
-				break;
+			break;
 			}
-			
+
 		}catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		run();
+		if(http.equals("1.0")){
+			try {
+				clientSocket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}else{
+			run();
+		}
 		//inFromClient.close();
-		//clientSocket.close();
 		//serverSocket.close();
 	}
 }
