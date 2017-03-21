@@ -8,24 +8,42 @@ import java.net.Socket;
 import java.util.Date;
 
 import imageRecognition.ImageRecognition;
-
+/**
+ * This server class responds to the get request of the client. It retrieves the requested page.
+ * 
+ * @author Laura Vranken
+ * @author Arne Vlietinck
+ *
+ */
 public class GetServer {
-	public static void get(Socket clientSocket, BufferedReader inFromClient, String path) throws IOException{
+	/**
+	 * This function retrieves the requested html file.
+	 * 
+	 * @param clientSocket
+	 * 			The socket where the server is connected to.
+	 * @param inFromClient
+	 * 			The buffered inputstream which the server receives from the client.
+	 * @param path
+	 * 			The path of the file which has to be retrieved.
+	 * @throws IOException
+	 */
+	public static void get(Socket clientSocket, BufferedReader inFromClient, String path, String http) throws IOException{
 
 		String statusCode = "";
 
+		//if path not specified, return index page.
 		if (path.isEmpty()){
 			path = "index.txt";
 		}
 
-//		//info client inlezen
-//		String s;
-//		while ((s = inFromClient.readLine()) != null) {
-//			System.out.println(s);
-//			if (s.isEmpty()) {
-//				break;
-//			}
-//		}
+		//info client inlezen
+		String s;
+		while ((s = inFromClient.readLine()) != null) {
+			System.out.println(s);
+			if (s.isEmpty()) {
+				break;
+			}
+		}
 
 		//file ophalen
 		Date today = new Date(); 
@@ -34,13 +52,15 @@ public class GetServer {
 		try{
 			file = new File(path);
 			BufferedReader htmlFile = new BufferedReader(new FileReader(file));
-			statusCode = "200 OK"; //of 302?
+			
+			statusCode = "200 OK";
 
 			//headers doorsturen
 			out.println("HTTP/1.1 "+statusCode);
 			out.println("Content-Type: text/html");
 			out.println("Content-Length: "+file.length());
 			out.println("Date: "+today);
+			out.println("is-modiefied-since: " + file.lastModified());
 			out.println("");
 			out.flush();	
 			
@@ -51,20 +71,19 @@ public class GetServer {
 				out.println(t);
 				out.flush();
 			}
-
-			//file lezen sluiten
-			htmlFile.close();
 			
-			//ImageRecognition.searchImageServer(file,clientSocket);
-
 		}catch(Exception e){
+			//page not found
 			statusCode = "404 Not Found";
 			out.println("HTTP/1.1 "+statusCode);
 			out.println("");
 			out.flush();
 		}
 
-		//verbinding sluiten
-		out.close();
+		//close connection when HTTP/1.0 is used.
+		if (http == "1.0"){
+			out.close();
+		}
+		
 	}
 }

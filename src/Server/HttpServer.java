@@ -55,7 +55,7 @@ class MultiThreadedServer implements Runnable{
 	}
 
 	/**
-	 * Synchronise the running thread.
+	 * Synchronize the running thread.
 	 * Create the server socket and make connection with a client socket.
 	 */
 	@Override
@@ -134,19 +134,24 @@ class WorkerRunnable implements Runnable{
 			String path;
 			int endindex = clientSentence.indexOf(" ", index+1);
 			path = clientSentence.substring(index+2,endindex);
+			
+			//Http
+			String http;
+			int indexSlash = clientSentence.lastIndexOf("/");
+			http = clientSentence.substring(indexSlash+1, clientSentence.length());
 
 
 			switch(command){
-			case "HEAD": HeadServer.head(clientSocket, inFromClient, path);
+			case "HEAD": HeadServer.head(clientSocket, inFromClient, path, http);
 				break;
 
-			case "GET": GetServer.get(clientSocket, inFromClient, path);
+			case "GET": GetServer.get(clientSocket, inFromClient, path, http);
 				break;
 
-			case "PUT": PutServer.put(inFromClient, path);
+			case "PUT": PutServer.put(inFromClient, path, http);
 				break;
 
-			case "POST": PostServer.post(inFromClient, path);
+			case "POST": PostServer.post(inFromClient, path, http);
 				break;
 			}
 			
