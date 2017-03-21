@@ -36,18 +36,24 @@ public class GetServer {
 			path = "index.txt";
 		}
 
+		boolean noHeader = false;
 		//info client inlezen
 		String s;
 		while ((s = inFromClient.readLine()) != null) {
+			noHeader = true;
 			System.out.println(s);
 			if (s.isEmpty()) {
 				break;
 			}
 		}
+		
+		PrintWriter out = new PrintWriter(clientSocket.getOutputStream());
+		if(noHeader == false && http == "1.0"){
+			out.println("HTTP/1.0 400 Bad Request");
+		}
 
 		//file ophalen
 		Date today = new Date(); 
-		PrintWriter out = new PrintWriter(clientSocket.getOutputStream());
 		File file = null;
 		try{
 			file = new File(path);
@@ -56,7 +62,7 @@ public class GetServer {
 			statusCode = "200 OK";
 
 			//headers doorsturen
-			out.println("HTTP/1.1 "+statusCode);
+			out.println("HTTP/"+http+ " "+statusCode);
 			out.println("Content-Type: text/html");
 			out.println("Content-Length: "+file.length());
 			out.println("Date: "+today);
@@ -75,7 +81,7 @@ public class GetServer {
 		}catch(Exception e){
 			//page not found
 			statusCode = "404 Not Found";
-			out.println("HTTP/1.1 "+statusCode);
+			out.println("HTTP/"+http+ " "+statusCode);
 			out.println("");
 			out.flush();
 		}

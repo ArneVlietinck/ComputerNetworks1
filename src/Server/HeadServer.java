@@ -33,23 +33,31 @@ public class HeadServer {
 			path = "index.txt";
 		}
 
+		boolean noHeader =false;
 		//info client uitlezen
 		String s;
 		while ((s = inFromClient.readLine()) != null) {
+			noHeader = true;
 			System.out.println(s);
 			if (s.isEmpty()) {
 				break;
 			}
 		}
+		
+		PrintWriter out = new PrintWriter(clientSocket.getOutputStream());
+		
+		if(noHeader == false && http == "1.0"){
+			out.println("HTTP/1.0 400 Bad Request");
+		}
 
 		//file uitlezen
 		Date today = new Date(); 
-		PrintWriter out = new PrintWriter(clientSocket.getOutputStream());
 		try{
 			File file = new File(path);
+			statusCode = "200 OK";
 
 			//headers doorsturen
-			out.println("HTTP/1.1 200 OK");
+			out.println("HTTP/"+http+" "+statusCode);
 			out.println("Content-Type: text/html");
 			out.println("Content-Length: "+file.length());
 			out.println("Date: "+today);
@@ -60,7 +68,7 @@ public class HeadServer {
 		}catch(Exception e){
 			//page not found
 			statusCode = "404 Not Found";
-			out.println("HTTP/1.1 "+statusCode);
+			out.println("HTTP/"+http+ " "+statusCode);
 			out.println("");
 			out.flush();
 		}
