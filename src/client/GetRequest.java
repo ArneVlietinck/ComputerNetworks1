@@ -55,7 +55,7 @@ public class GetRequest {
 		boolean startHtmlFound = false;
 		while((commandLineString = br.readLine()) != null){
 			System.out.println(commandLineString);
-			if (commandLineString.contains(" html")){
+			if (commandLineString.contains(" html") || commandLineString.contains("html>")){
 				startHtmlFound = true;
 			}
 			if(startHtmlFound){
